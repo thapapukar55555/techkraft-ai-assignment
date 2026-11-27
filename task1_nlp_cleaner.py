@@ -63,17 +63,6 @@ def clean_tickets(tickets: list[dict]) -> list[dict]:
     return cleaned_tickets
 
 
-# if __name__ == "__main__":
-#     sample_tickets = [
-#         {"ticket_id": "T-1", "query": " Hello<br>world!  "},
-#         {"ticket_id": "T-1", "query": "Duplicate ticket"},
-#         {"ticket_id": "T-2", "query": None},
-#         {"ticket_id": "T-3", "query": " a  "},
-#     ]
-
-#     print(clean_tickets(sample_tickets))
-
-
 def preprocess_text(text: str) -> list[str]:
     """Convert text into lowercase tokens without common stop words."""
     lowercase_text = text.lower()

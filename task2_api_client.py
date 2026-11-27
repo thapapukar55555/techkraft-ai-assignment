@@ -44,18 +44,6 @@ def get_fallback_documents() -> list[dict]:
     return transform_posts(mock_posts)
 
 
-# def fetch_documents() -> list[dict]:
-#     """Download API posts and transform the first five."""
-#     response = requests.get(
-#         "https://jsonplaceholder.typicode.com/posts",
-#         timeout=10,
-#     )
-#     response.raise_for_status()
-
-#     posts = response.json()
-#     return transform_posts(posts)
-
-
 def fetch_documents(
     url: str = "https://jsonplaceholder.typicode.com/posts",
 ) -> list[dict]:
@@ -112,22 +100,3 @@ if __name__ == "__main__":
 
     documents = fetch_documents()
     print(json.dumps(documents, indent=2))
-
-# if __name__ == "__main__":
-#     # sample_posts = [
-#     #     {
-#     #         "id": 1,
-#     #         "title": "  Example post  ",
-#     #         "body": "First line.\nSecond line.",
-#     #     },
-#     #     {
-#     #         "id": 1,
-#     #         "title": "  Example post  ",
-#     #         "body": "First line.\nSecond line.",
-#     #     }
-#     # ]
-#     documents = fetch_documents()
-#     print(json.dumps(documents, indent=2))
-
-# result = transform_posts(sample_posts)
-# print(json.dumps(result, indent=5))
