@@ -42,6 +42,16 @@ Install dependencies using that environment:
 .\.pukarvenv\Scripts\python.exe -m pip install -r requirements.txt
 ```
 
+Download the WordNet dictionary used for noun lemmatization:
+
+```powershell
+.\.pukarvenv\Scripts\python.exe -m nltk.downloader wordnet
+```
+
+The initial WordNet download requires an internet connection. Once the
+data is installed, lemmatization and the automated tests can run offline.
+GitHub Actions downloads WordNet before running checks.
+
 No paid API key is required. The live API example needs an internet
 connection; the automated API tests use mocked responses.
 
@@ -56,6 +66,7 @@ The script:
 - Keeps the first occurrence of each ticket ID.
 - Removes invalid queries and cleans HTML tags and whitespace.
 - Extracts lowercase alphanumeric tokens and removes stop words.
+- Applies basic noun lemmatization using NLTK WordNet.
 - Prints category counts and the five most frequent keywords.
 - Writes cleaned records and tokens to `data/cleaned_tickets.json`.
 
@@ -64,7 +75,7 @@ Expected results for the supplied dataset:
 - Input records: 9
 - Cleaned records: 6
 - Categories: IT 3, HR 2, Finance 1
-- Top keywords: days (2), vpn (2), cannot (1), company (1), connect (1)
+- Top keywords: day (2), vpn (2), cannot (1), company (1), connect (1)
 
 ## Part 2: API client
 
@@ -92,10 +103,11 @@ documents in the same output format.
 .\.pukarvenv\Scripts\python.exe -m pytest -q
 ```
 
-The current suite contains 12 checks covering:
+The current suite contains 14 checks covering:
 
 - Duplicate removal and invalid queries.
 - Text preprocessing and preservation of original input.
+- Noun lemmatization of plural and singular word forms.
 - Successful API formatting and the five-post limit.
 - The configured request timeout.
 - Fallback behavior for HTTP errors, timeouts and connection failures.
@@ -111,7 +123,9 @@ Mocked HTTP responses keep tests independent of internet availability.
 - Tokenization targets the English sample data and splits hyphenated
   words into separate tokens.
 - HTML cleanup handles simple tags in the supplied dataset.
-- Stemming and lemmatization are not applied.
+- Basic noun lemmatization groups variants such as "days" and "day".
+  Tokens are treated as nouns without contextual part-of-speech tagging,
+  so this does not normalize every verb or resolve ambiguous words.
 - Fallback documents use negative IDs and explicit mock titles so they
   are distinguishable from real API posts.
 

@@ -3,6 +3,10 @@ import re
 from collections import Counter
 from pathlib import Path
 
+from nltk.stem import WordNetLemmatizer
+
+LEMMATIZER = WordNetLemmatizer()
+
 STOP_WORDS = {
     "a",
     "an",
@@ -34,7 +38,7 @@ def clean_tickets(tickets: list[dict]) -> list[dict]:
     for ticket in tickets:
         ticket_id = ticket["ticket_id"]
 
-        # Keep only the first occurrence of each ticket ID.
+        # Keeps only the first occurrence of each ticket ID.
         if ticket_id in seen_ids:
             continue
 
@@ -42,20 +46,20 @@ def clean_tickets(tickets: list[dict]) -> list[dict]:
 
         query = ticket.get("query")
 
-        # Reject null values and other non-text values.
+        # Rejects null values and other non-text values.
         if not isinstance(query, str):
             continue
 
-        # Replace HTML tags with spaces so words stay separated.
+        # Replaces those HTML tags with spaces so words stay separated.
         query = re.sub(r"<[^>]+>", " ", query)
 
-        # Remove extra spaces, tabs, and line breaks.
+        # Removes extra spaces, tabs, and line breaks.
         query = " ".join(query.split())
 
         if not query:
             continue
 
-        # Preserve the original data by creating a new dictionary.
+        # Preserves the original data by creating a new dictionary,since original ma override ma ko xxaina
         cleaned_ticket = ticket.copy()
         cleaned_ticket["query"] = query
         cleaned_tickets.append(cleaned_ticket)
@@ -63,15 +67,24 @@ def clean_tickets(tickets: list[dict]) -> list[dict]:
     return cleaned_tickets
 
 
+# def preprocess_text(text: str) -> list[str]:
+#     """Convert text into lowercase tokens without common stop words."""
+#     lowercase_text = text.lower()
+
+#     tokens = re.findall(r"[a-z0-9]+", lowercase_text)
+
+#     filtered_tokens = [token for token in tokens if token not in STOP_WORDS]
+
+#     return filtered_tokens
+
+
 def preprocess_text(text: str) -> list[str]:
-    """Convert text into lowercase tokens without common stop words."""
+    """Lowercase, tokenize, remove stop words, and lemmatize nouns."""
     lowercase_text = text.lower()
-
     tokens = re.findall(r"[a-z0-9]+", lowercase_text)
-
     filtered_tokens = [token for token in tokens if token not in STOP_WORDS]
 
-    return filtered_tokens
+    return [LEMMATIZER.lemmatize(token, pos="n") for token in filtered_tokens]
 
 
 def analyze_tickets(cleaned_tickets: list[dict]) -> dict:
@@ -92,6 +105,10 @@ def analyze_tickets(cleaned_tickets: list[dict]) -> dict:
         "category_counts": dict(category_counts),
         "top_keywords": top_keywords,
     }
+
+
+def test_preprocessing_normalizes_noun_forms(text, expected):
+    assert preprocess_text(text) == expected
 
 
 def main() -> None:

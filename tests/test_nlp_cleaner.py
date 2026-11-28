@@ -39,3 +39,17 @@ def test_cleaning_does_not_modify_original_ticket():
 
     assert original["query"] == " Hello<br>world! "
     assert result[0]["query"] == "Hello world!"
+
+
+@pytest.mark.parametrize(
+    "text, expected",
+    [
+        ("days day", ["day", "day"]),
+        (
+            "companies company employees",
+            ["company", "company", "employee"],
+        ),
+    ],
+)
+def test_preprocessing_normalizes_noun_forms(text, expected):
+    assert preprocess_text(text) == expected

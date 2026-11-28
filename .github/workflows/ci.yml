@@ -24,6 +24,8 @@ jobs:
 
       - name: Install dependencies
         run: python -m pip install -r requirements.txt
+      - name: Download WordNet data
+        run: python -m nltk.downloader -q wordnet
 
       - name: Check code quality
         run: python -m ruff check task1_nlp_cleaner.py task2_api_client.py tests

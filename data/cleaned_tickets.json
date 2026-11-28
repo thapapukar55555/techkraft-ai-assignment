@@ -22,7 +22,7 @@
       "remote",
       "work",
       "wfh",
-      "days"
+      "day"
     ]
   },
   {
@@ -35,7 +35,7 @@
       "screen",
       "flickering",
       "latest",
-      "windows",
+      "window",
       "update"
     ]
   },
@@ -50,7 +50,7 @@
       "meal",
       "expense",
       "reimbursement",
-      "receipts"
+      "receipt"
     ]
   },
   {
@@ -63,11 +63,11 @@
       "paid",
       "sick",
       "leave",
-      "days",
-      "interns",
+      "day",
+      "intern",
       "full",
       "time",
-      "employees",
+      "employee",
       "get"
     ]
   },
